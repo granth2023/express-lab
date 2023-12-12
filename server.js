@@ -18,6 +18,10 @@ app.get('/', function(req, res) {
     })
 })
 
+app.get('/students', function(req, res) {
+    res.status(200).json({ students: [] })
+});
+
 app.get('/home', function(req, res) {
     res.json({
         message: 'Home Page'
@@ -31,6 +35,8 @@ app.post('/home', function(req, res) {
         message: `Hi ${req.body.name}`
     })
 })
+
+app.post('/student', function(req, res))
 
 // Initialize server
 app.listen(PORT, function() {
