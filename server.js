@@ -83,10 +83,18 @@ app.put('/student', async function(req, res){
 
 app.delete('/studnet', async function(req, res){
     try{ 
-        const studentTodelete = req.body.name;
-        const data = await fs.read f
+        const studentToDelete = req.body.name;
+        const data = await fs.readFile('students.json', 'utf8');
+        let students = JSON.parse(data);
+
+        students = students.filter(student => student.name !== studentToDelete);
+        await fs.writeFile('students.json', JSON.stringify(students, null, 2));
+    
+        res.status(200).json({ message: `${studentToDelete} deleted` });
+    } catch (error) {
+        console.error(" error handling delelete request:", error);
+        res.status(500).json({ message: "Internal server error"});
     }
-    res.status(200).json({ deletedStudentId: req.body.id });
 });
 
 // Initialize server
