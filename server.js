@@ -41,6 +41,10 @@ app.post('/student', function(req, res){
     res.status(201).json({ student: req.body });
 });
 
+app.put('/student', function(req, res){
+    res.status(200).json({ updatedStudent: req.body });
+});
+
 // Initialize server
 app.listen(PORT, function() {
     console.log(`Server running at PORT ${PORT}`)
