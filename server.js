@@ -45,6 +45,10 @@ app.put('/student', function(req, res){
     res.status(200).json({ updatedStudent: req.body });
 });
 
+app.delete('/studnet', function(req, res){
+    res.status(200).json({ deletedStudentId: req.body.id });
+});
+
 // Initialize server
 app.listen(PORT, function() {
     console.log(`Server running at PORT ${PORT}`)
