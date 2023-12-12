@@ -1,6 +1,7 @@
 
 // import modules
 import express from 'express'
+import fs from 'fs/promises'
 
 // create express app
 const app = express()
@@ -18,8 +19,18 @@ app.get('/', function(req, res) {
     })
 })
 
-app.get('/students', function(req, res) {
-    res.status(200).json({ students: [] })
+app.get('/students', async function(req, res) {
+    try { 
+
+        const data = await fs.readFile('students.json', 'utf8');
+        console.log("File data:". data);
+        const students = JSON.parse(data);
+        console.log("Parsed students:". students);
+        res.status(200).json({ students })
+} catch (error) {
+    console.error("error reading the students file:", error);
+    res.status(500).json({ message: "Internal server error" })
+}
 });
 
 app.get('/home', function(req, res) {
@@ -36,16 +47,45 @@ app.post('/home', function(req, res) {
     })
 })
 
-app.post('/student', function(req, res){
+app.post('/student', async function (req, res) {
+    try { 
+        const newStudent = req.body;
+        const data = await fs.readFile('students.json', 'utf8');
+        const students = JSON.parse(data);
 
-    res.status(201).json({ student: req.body });
+        students.push(newStudent);
+        await fs.writeFile('students.json', JSON.stringify(students, null, 2));
+
+        res.status(201).json({ student: newStudent });
+    } catch (error) {
+        console.error( "error handling post request:", error);
+        res.status(500).json({ message: "Internal server error " });
+    }
 });
 
-app.put('/student', function(req, res){
-    res.status(200).json({ updatedStudent: req.body });
+
+app.put('/student', async function(req, res){
+    try {
+        const studentToUpdate = req.body;
+        const data = await fs.readFile('students.json', 'utf8');
+        let students = JSON.parse(data);
+
+        students = students.map(student =>
+            student.name === studentToUpdate.name ? studentToUpdate : student);
+            await fs.writeFile('students.json', JSON.stringify(students, null, 2));
+        
+            res.status(200).json({ updatedStudent: req.body });
+    } catch (error) {
+        console.error("error handling put:", error);
+        res.status(500).json({ message: "Internal server error"});
+    }
 });
 
-app.delete('/studnet', function(req, res){
+app.delete('/studnet', async function(req, res){
+    try{ 
+        const studentTodelete = req.body.name;
+        const data = await fs.read f
+    }
     res.status(200).json({ deletedStudentId: req.body.id });
 });
 
