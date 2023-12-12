@@ -36,7 +36,10 @@ app.post('/home', function(req, res) {
     })
 })
 
-app.post('/student', function(req, res))
+app.post('/student', function(req, res){
+
+    res.status(201).json({ student: req.body });
+});
 
 // Initialize server
 app.listen(PORT, function() {
